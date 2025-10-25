@@ -23,7 +23,7 @@ This project demonstrates best practices in API design, modular architecture, an
 |-----------|--------|
 | **Language** | Python |
 | **Framework** | Flask, Flask-Smorest |
-| **Testing / Docs** | Postman, Swagger UI |
+| **Testing / Docs** | Insomnia |
 | **Deployment** | Docker |
 | **Version Control** | Git & GitHub |
 
