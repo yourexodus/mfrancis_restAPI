@@ -9,7 +9,7 @@ from resources.user import blp as UserBlueprint
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 from resources.tag import blp as TagBlueprint
-
+import hashlib
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -27,7 +27,9 @@ def create_app(db_url=None):
     db.init_app(app)
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = "jose"
+    # With a stable 256-bit key derived from a static string
+    key_seed = "marlainna_testing_env"  # choose any string
+    app.config["JWT_SECRET_KEY"] = hashlib.sha256(key_seed.encode()).hexdigest()
     jwt = JWTManager(app)
 
     # @jwt.additional_claims_loader

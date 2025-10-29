@@ -20,8 +20,9 @@ blp = Blueprint("Users", "users", description="Operations on users")
 
 @blp.route("/register")
 class UserRegister(MethodView):
-    @blp.arguments(UserSchema)
-    def post(self, user_data):
+    @blp.arguments(UserSchema)  #will include the username and pw
+    def post(self, user_data): #dictionary containing user name and pw
+        #ensure unique 
         if UserModel.query.filter(UserModel.username == user_data["username"]).first():
             abort(409, message="A user with that username already exists.")
 
@@ -37,16 +38,18 @@ class UserRegister(MethodView):
 
 @blp.route("/login")
 class UserLogin(MethodView):
-    @blp.arguments(UserSchema)
+    @blp.arguments(UserSchema) #user name and password
     def post(self, user_data):
+        #first check if the user exist
         user = UserModel.query.filter(
             UserModel.username == user_data["username"]
         ).first()
-
+        #user exist, now check the password against the hash pw in the database
         if user and pbkdf2_sha256.verify(user_data["password"], user.password):
-            access_token = create_access_token(identity=user.id, fresh=True)
+            #pass a sring as the identity and not an int. Remove fresh = True
+            access_token = create_access_token(identity=str(user.id) )#, fresh=True)
             refresh_token = create_refresh_token(user.id)
-            return {"access_token": access_token, "refresh_token": refresh_token}, 200
+            return {"access_token": access_token} #, "refresh_token": refresh_token}, 200
 
         abort(401, message="Invalid credentials.")
 
@@ -63,10 +66,7 @@ class UserLogout(MethodView):
 @blp.route("/user/<int:user_id>")
 class User(MethodView):
     """
-    This resource can be useful when testing our Flask app.
-    We may not want to expose it to public users, but for the
-    sake of demonstration in this course, it can be useful
-    when we are manipulating data regarding the users.
+    
     """
 
     @blp.response(200, UserSchema)
