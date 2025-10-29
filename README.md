@@ -272,7 +272,7 @@ This section outlines the essential CRUD operations for the Item resource, with 
 > This visualization details the complete Item Management Process, including item creation, retrieval, and deletion.
 
 ---
-## 🧠 User Flow (Authentication & Authorization)
+## ✅ User Flow (Authentication & Authorization)
 
 <table>
 <thead>
@@ -331,6 +331,76 @@ This outlines the key steps in the user authentication and authorization process
 > This flowchart illustrates the **User Authentication Process**, including registration, login, token creation, and JWT validation.
 
 ---
+<!-- API Testing (with Insomnia) - paste this under your "User" section -->
+<section id="api-testing" style="margin-top:1.5rem;">
+  <h2 style="font-size:1.25rem; margin-bottom:0.25rem;">🧪 API Testing (with Insomnia)</h2>
+  <p style="margin-top:0; margin-bottom:0.75rem;">
+    I verified all REST API endpoints using <strong>Insomnia</strong>, <code>pytest</code>, and manual checks to ensure reliability,
+    authentication, and proper error handling.
+  </p>
+
+  <!-- Badge -->
+  <p style="margin:0 0 0.75rem 0;">
+    <img alt="Tested with Insomnia" src="https://img.shields.io/badge/Tested%20With-Insomnia-purple?logo=insomnia" style="vertical-align:middle;">
+    &nbsp;
+    <a href="https://docs.google.com/document/d/e/2PACX-1vT70eScmMd-kH5hozehk0BMeGaVpRpAYFy9JCqHy0oQoAd_04LikDVhA8BFOWSIFm2yvtG_teVL7oiY/pub" target="_blank" rel="noopener noreferrer">
+      View full testing report (screenshots & steps)
+    </a>
+  </p>
+
+  <!-- Table -->
+  <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-family:system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;">
+      <thead>
+        <tr>
+          <th style="text-align:left; padding:8px 12px; border-bottom:2px solid #e1e4e8;">Test Type</th>
+          <th style="text-align:left; padding:8px 12px; border-bottom:2px solid #e1e4e8;">Tool / Method</th>
+          <th style="text-align:left; padding:8px 12px; border-bottom:2px solid #e1e4e8;">Purpose</th>
+          <th style="text-align:left; padding:8px 12px; border-bottom:2px solid #e1e4e8;">Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Manual Testing</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><code>Flask</code> test server</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Verified CRUD operations and JSON responses</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><code>/item</code>, <code>/store</code>, <code>/user/register</code></td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Token Verification</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><a href="https://jwt.io/" target="_blank" rel="noopener noreferrer">jwt.io</a></td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Validated JWT access tokens & signature</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Signature ✅ verified</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Automated Tests</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><code>pytest</code> + <code>Flask test_client()</code></td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Endpoint logic, response codes, error handling</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><code>test_create_item()</code>, <code>test_login_user()</code></td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">API Client Testing</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;"><strong>Insomnia</strong></td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Sent authenticated requests with JWT headers; tested JSON payloads</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">GET <code>/item/1</code>, POST <code>/store</code></td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Error Handling</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Manual & mock inputs</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">Confirmed messages for expired/invalid/missing tokens</td>
+          <td style="padding:10px 12px; border-bottom:1px solid #f1f1f1;">`401 token_expired`, `401 invalid_token`</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;">Database Validation</td>
+          <td style="padding:10px 12px;"><code>SQLite Browser</code> / SQLAlchemy logs</td>
+          <td style="padding:10px 12px;">Ensured persistent storage after CRUD operations</td>
+          <td style="padding:10px 12px;">Checked <code>data.db</code> for correct table updates</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+--
 ## ⚙️ Setup Instructions
 
 ### 1. Clone the repository
