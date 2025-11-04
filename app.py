@@ -1,6 +1,8 @@
+import os
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate # <--- ADDED: Flask-Migrate Import
 
 from db import db
 from blocklist import BLOCKLIST
@@ -9,7 +11,14 @@ from resources.user import blp as UserBlueprint
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 from resources.tag import blp as TagBlueprint
-import hashlib
+
+# --- CRITICAL FIX 1: MODEL IMPORTS MUST BE AT THE TOP LEVEL ---
+# This ensures SQLAlchemy registers your models for autodiscovery by Flask-Migrate.
+import models.user
+import models.item
+import models.store
+import models.tag
+
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -21,23 +30,17 @@ def create_app(db_url=None):
     app.config[
         "OPENAPI_SWAGGER_UI_URL"
     ] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///data.db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or os.getenv("DATABASE_URL","sqlite:///data.db")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["PROPAGATE_EXCEPTIONS"] = True
+    
     db.init_app(app)
     api = Api(app)
 
-    # With a stable 256-bit key derived from a static string
-    key_seed = "marlainna_testing_env"  # choose any string
-    app.config["JWT_SECRET_KEY"] = hashlib.sha256(key_seed.encode()).hexdigest()
+    app.config["JWT_SECRET_KEY"] = "jose"
     jwt = JWTManager(app)
 
-    # @jwt.additional_claims_loader
-    # def add_claims_to_jwt(identity):
-    #     # TODO: Read from a config file instead of hard-coding
-    #     if identity == 1:
-    #         return {"is_admin": True}
-    #     return {"is_admin": False}
+    # ... (Your JWT callbacks remain here) ...
 
     @jwt.token_in_blocklist_loader
     def check_if_token_in_blocklist(jwt_header, jwt_payload):
@@ -94,14 +97,19 @@ def create_app(db_url=None):
 
     # JWT configuration ends
 
-    with app.app_context():
-        import models  # noqa: F401
-
-        db.create_all()
-
+    # REMOVED: The manual db.create_all() block is removed to rely on migrations
+    
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)
     api.register_blueprint(TagBlueprint)
 
     return app
+
+# --- CRITICAL FIX 2: EXPOSE APP AND MIGRATE OBJECTS TO FLASK CLI ---
+# This ensures the 'flask db' command is available.
+app = create_app()
+migrate = Migrate(app, db)
+
+if __name__ == '__main__':
+    app.run(debug=True)
