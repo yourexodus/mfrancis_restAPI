@@ -1,4 +1,8 @@
 import os
+
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
@@ -37,7 +41,8 @@ def create_app(db_url=None):
     db.init_app(app)
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = "jose"
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallback-key-for-local-testing")
+    print("JWT_SECRET_KEY:", os.getenv("JWT_SECRET_KEY"))
     jwt = JWTManager(app)
 
     # ... (Your JWT callbacks remain here) ...
