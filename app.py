@@ -23,6 +23,9 @@ import models.item
 import models.store
 import models.tag
 
+import logging
+
+
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -42,6 +45,11 @@ def create_app(db_url=None):
     api = Api(app)
 
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
+
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger.info("JWT_SECRET_KEY length: %d", len(app.config['JWT_SECRET_KEY']) if app.config['JWT_SECRET_KEY'] else 0)
+
     print("JWT_SECRET_KEY:", os.getenv("JWT_SECRET_KEY"))
     jwt = JWTManager(app)
 
