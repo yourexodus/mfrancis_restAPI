@@ -119,11 +119,18 @@ def create_app(db_url=None):
 
     return app
 
-# --- CRITICAL FIX 2: EXPOSE APP AND MIGRATE OBJECTS TO FLASK CLI ---
-# This ensures the 'flask db' command is available.
-app = create_app()
-migrate = Migrate(app, db)
+# --- MIGRATION SUPPORT ---
+# Only used when you run "flask db" commands locally
+def make_migrations_app():
+    app = create_app()
+    Migrate(app, db)
+    return app
 
+
+# --- LOCAL DEV ONLY ---
 if __name__ == "__main__":
     from os import environ
+    app = create_app()
     app.run(host="0.0.0.0", port=int(environ.get("PORT", 10000)))
+
+ 
