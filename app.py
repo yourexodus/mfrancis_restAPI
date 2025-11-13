@@ -41,7 +41,7 @@ def create_app(db_url=None):
     db.init_app(app)
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "fallback-key-for-local-testing")
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
     print("JWT_SECRET_KEY:", os.getenv("JWT_SECRET_KEY"))
     jwt = JWTManager(app)
 
