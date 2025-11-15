@@ -1,8 +1,4 @@
-import os
-
-from dotenv import load_dotenv
-load_dotenv()
-
+ 
 from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
@@ -44,13 +40,7 @@ def create_app(db_url=None):
     db.init_app(app)
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-    logger.info("JWT_SECRET_KEY length: %d", len(app.config['JWT_SECRET_KEY']) if app.config['JWT_SECRET_KEY'] else 0)
-
-    print("JWT_SECRET_KEY:", os.getenv("JWT_SECRET_KEY"))
+    app.config["JWT_SECRET_KEY"] = "jose"
     jwt = JWTManager(app)
 
     # ... (Your JWT callbacks remain here) ...
@@ -72,7 +62,7 @@ def create_app(db_url=None):
             jsonify(
                 {"message": "Signature verification failed.", "error": "invalid_token"}
             ),
-            401,
+            401,        
         )
 
     @jwt.unauthorized_loader
