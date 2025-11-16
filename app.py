@@ -40,7 +40,7 @@ def create_app(db_url=None):
     db.init_app(app)
     api = Api(app)
 
-    app.config["JWT_SECRET_KEY"] = "jose"
+    app.config["JWT_SECRET_KEY"] = "JWT_SECRET_KEY"
     jwt = JWTManager(app)
 
     # ... (Your JWT callbacks remain here) ...
