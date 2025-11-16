@@ -12,7 +12,7 @@ This project demonstrates best practices in API design, modular architecture, an
 - 🔹 Input validation and robust error handling (404, 400)
 - 🔹 Modular architecture using **Blueprints** and **MethodViews**
 - 🔹 Auto-generated API documentation with **Swagger UI**
-- 🔹 JWT-based authentication for secure access
+- 🔹  
 - 🔹 Dockerized for scalable deployment
 
 ---
