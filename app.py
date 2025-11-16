@@ -37,6 +37,14 @@ def create_app(db_url=None):
     app.config["PROPAGATE_EXCEPTIONS"] = True
     
     db.init_app(app)
+    
+    # === CRITICAL FIX: AUTOMATIC TABLE CREATION ===
+    # This ensures tables (like 'users') are created on startup if they don't exist, 
+    # resolving the "no such table" error.
+    with app.app_context():
+        db.create_all()
+    # ==============================================
+    
     api = Api(app)
 
     # REMOVED: All JWT initialization and callback functions.
@@ -46,10 +54,6 @@ def create_app(db_url=None):
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)
     api.register_blueprint(TagBlueprint)
-
-    # NOTE: You must ensure all methods in these blueprints 
-    # (user.py, item.py, store.py, tag.py) have had the 
-    # @jwt_required() decorator removed.
 
     return app
 
